@@ -2,7 +2,7 @@
 from flask import Flask, redirect, request, jsonify
 import json  # FOR THE REST API
 import os
-
+import wiringpi
 from cloudant.client import Cloudant as CouchDB
 DB_IP = "127.0.0.1"
 if 'COUCHDB_PORT_5984_TCP_ADDR' in os.environ:
@@ -12,29 +12,25 @@ if 'COUCHDB_PORT_5984_TCP_ADDR' in os.environ:
 
 
 # 11
-import wiringpi
-
 wiringpi.wiringPiSetup()
 # SETUP PINS
-LED_PIN_1 = 8
-LED_PIN_2 = 9
-BUTTON_YELLOW_PIN = 2
-BUTTON_BLUE_PIN = 3
+LED_PIN_1 = 7
+LED_PIN_2 = 0
+BUTTON_YELLOW_PIN = 9
+BUTTON_BLUE_PIN = 8
 # SET TO OUTPUT
 wiringpi.pinMode(LED_PIN_1, 1)
 wiringpi.pinMode(LED_PIN_2, 1)
-wiringpi.digitalWrite(LED_PIN_1, 1)
-wiringpi.digitalWrite(LED_PIN_1, 1)
+wiringpi.digitalWrite(LED_PIN_1, 0)
+wiringpi.digitalWrite(LED_PIN_2, 0)
 
 # 12
 # SET INPUT
 wiringpi.pinMode(BUTTON_YELLOW_PIN, 0)
 wiringpi.pinMode(BUTTON_BLUE_PIN, 0)
 # ENABLE PULLUP
-wiringpi.digitalWrite(BUTTON_YELLOW_PIN, 1)
-wiringpi.digitalWrite(BUTTON_BLUE_PIN, 1)
-
-
+wiringpi.pullUpDnControl(BUTTON_YELLOW_PIN, 2)
+wiringpi.pullUpDnControl(BUTTON_BLUE_PIN, 2)
 
 # 1
 app = Flask(__name__, static_url_path='/static')
@@ -51,8 +47,8 @@ def index_redirect():
 def api_status():
     global wiringpi
     status = {}
-    status['button_yellow'] = bool(wiringpi.digitalRead(BUTTON_YELLOW_PIN))
-    status['button_blue'] = bool(wiringpi.digitalRead(BUTTON_BLUE_PIN))
+    status['button_yellow'] = not bool(wiringpi.digitalRead(BUTTON_YELLOW_PIN))
+    status['button_blue'] = not bool(wiringpi.digitalRead(BUTTON_BLUE_PIN))
     return jsonify(status)
 
 
@@ -66,10 +62,10 @@ def set_led():
     print(content['led_index'])
 
     # 10
-    if content['led_index'] == 1:
-        wiringpi.digitalWrite(LED_PIN_1, content['status'])  # 12
-    elif content['led_index'] == 2:
-        wiringpi.digitalWrite(LED_PIN_2, content['status'])  # 12
+    if int(content['led_index']) == 1:
+        wiringpi.digitalWrite(LED_PIN_1, int(content['status']))  # 12
+    elif int(content['led_index']) == 2:
+        wiringpi.digitalWrite(LED_PIN_2, int(content['status']))  # 12
 
     # 13 -- DATABSE WRITE DOCUEMTENT --
     couch_client = CouchDB('admin', 'admin', url='http://' + DB_IP + ':5984', connect=True)
@@ -102,4 +98,4 @@ def get_favicon_ico():
 
 # 1
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')  # DO NOT IN PRODUCTION
+    app.run(debug=True, host='0.0.0.0', port=5000)  # DO NOT IN PRODUCTION

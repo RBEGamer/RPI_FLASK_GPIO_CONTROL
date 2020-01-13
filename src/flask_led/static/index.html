@@ -15,26 +15,27 @@
     }
   </style>
 </head>
-<body>
-
+<body style="align: center;">
+<div class="center">
 <h1>DEMO SITE</h1>
 
-<!-- 4 -->
-<img src="img/btn_yellow_released.png" id="btn_yellow_img" />
-<!-- 7 -->
-<img src="img/btn_blue_released.png" id="btn_blue_img" />
 
-
-
-
-
-
-<br>
-<br>
-
-<!-- 9 -->
-<button type="button" class="btn btn-success" onclick="set_led(1,1)">SET LED 1 ON</button>
-<button type="button" class="btn btn-danger" onclick="set_led(1,0)">SET LED 1 OFF</button>
+<table>
+  <tr>
+    <td><img src="img/btn_yellow_released.png" id="btn_yellow_img" /></td><!-- 4 -->
+    <td><img src="img/btn_blue_released.png" id="btn_blue_img" /></td><!-- 4 -->
+  </tr>
+</table>
+<table>
+  <tr>
+    <td><button type="button" class="btn btn-success" onclick="set_led(1,1)">SET LED 1 ON</button></td><!-- 9 -->
+    <td><button type="button" class="btn btn-danger" onclick="set_led(1,0)">SET LED 1 OFF</button></td><!-- 9 -->
+    </tr>
+   <tr>
+    <td><button type="button" class="btn btn-success" onclick="set_led(2,1)">SET LED 2 ON</button></td><!-- 9 -->
+    <td><button type="button" class="btn btn-danger" onclick="set_led(2,0)">SET LED 2 OFF</button></td><!-- 9 -->
+  </tr>
+</table>
 
 
 
@@ -46,9 +47,10 @@
   <script src="jquery/jquery.min.js"></script>
   <script src="bootstrap/bootstrap.min.js"></script>
 
-  <script>
 
-<!-- 10 -->
+
+  <script>
+    //<!-- 10 -->
     function set_led(_led_index,_status){
       console.log(_led_index + " " +_status);
 
@@ -99,19 +101,13 @@
       });
 
 
-    },500);
-
-
-
-
-
-
+    },100);
 
   });
   </script>
 
 
-
+</div>
 </body>
 </html>
 
