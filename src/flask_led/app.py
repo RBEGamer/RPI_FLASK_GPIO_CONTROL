@@ -18,7 +18,6 @@ couch_client.disconnect();
 
 #---------------------------------------------------------------------
 
-# 1
 app = Flask(__name__, static_url_path='/static')
 
 
