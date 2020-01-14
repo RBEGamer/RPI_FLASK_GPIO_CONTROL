@@ -20,6 +20,7 @@ A short demo for IT2 Lesson; How to use Flask to light up LEDs on a PI
 def index_redirect():
     return redirect("/static/index.html", code=302)
 ```
+* explain a redirect
 
 
 ## 2 - FLASK - API - ButtonStatus
@@ -33,6 +34,7 @@ def api_status():
     status['button_blue'] = False
     return jsonify(status)
 ```
+* explain @app route
 
 ## 3 - HTML - IMAGES FOR BUTTON
 ```html
@@ -43,6 +45,8 @@ def api_status():
   </tr>
 </table>
 ```
+* explain basic images WITH ID --- !!
+
 
 ## 4 - JS- GET BUTTON STATE FROM API
 ```js
