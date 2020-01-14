@@ -2,7 +2,19 @@
 A short demo for IT2 Lesson; How to use Flask to light up LEDs on a PI
 
 
-# FLASK - REDIRECT TO INDEX.html
+
+
+
+
+
+## FIRST
+* SHOW FOLDER STRUCTURE
+* SHOW PYCHARM SETTINGS
+* SHOW STARTED SERVER WHERE GOT A 404
+
+
+
+## FLASK - REDIRECT TO INDEX.html
 ```python
 @app.route('/')
 def index_redirect():
@@ -10,7 +22,7 @@ def index_redirect():
 ```
 
 
-# FLASK - API - ButtonStatus
+## FLASK - API - ButtonStatus
 
 ```python
 @app.route('/api/status', methods=['get'])
@@ -22,7 +34,7 @@ def api_status():
     return jsonify(status)
 ```
 
-# HTML - IMAGES FOR BUTTON
+## HTML - IMAGES FOR BUTTON
 ```html
 <table>
   <tr>
@@ -32,7 +44,7 @@ def api_status():
 </table>
 ```
 
-# JS- GET BUTTON STATE FROM API
+## JS- GET BUTTON STATE FROM API
 ```js
  $.get( "/api/status", function( data ) {
       console.log(data);
@@ -53,14 +65,18 @@ def api_status():
 
     });
 ```
+* EXPLAIN `$()` to acces ement
+* EXPLAIN GET REQUEST VS the normal /api/status request
 
-# JS - DO IN INTERVAL
+
+
+## JS - DO IN INTERVAL
 ```js
 setInterval(function(){
 // DO STH EVERY 100 MS
 },100);
 ```
-
+* EXPLAIN SET INTERVAL
 
 ## FLASK - INIT GPIO
 ```python
@@ -84,9 +100,118 @@ wiringpi.pinMode(BUTTON_BLUE_PIN, 0)
 wiringpi.pullUpDnControl(BUTTON_YELLOW_PIN, 2)
 wiringpi.pullUpDnControl(BUTTON_BLUE_PIN, 2)
 ```
+* EXPLAIN PINMODE
+* SHOW pinout xyz
+* EXPLAIN PULLUP
+
 
 ## FLASK - READ BUTTON INPUTS
 ```python
     status['button_yellow'] = not bool(wiringpi.digitalRead(BUTTON_YELLOW_PIN))
     status['button_blue'] = not bool(wiringpi.digitalRead(BUTTON_BLUE_PIN))
+```
+* TEST THIS
+* the `not` is because we used PULLUP setup in wiring pi; so the normal state (not pressed) is HIGH/True
+
+
+## HTML - ADD LED SWITCH BUTTONS
+```html
+
+ <button type="button" class="btn btn-success" onclick="set_led(1,1)">SET LED 1 ON</button><!-- 9 -->
+ <button type="button" class="btn btn-danger" onclick="set_led(1,0)">SET LED 1 OFF</button><!-- 9 -->
+  
+
+   <button type="button" class="btn btn-success" onclick="set_led(2,1)">SET LED 2 ON</button><!-- 9 -->
+   <button type="button" class="btn btn-danger" onclick="set_led(2,0)">SET LED 2 OFF</button><!-- 9 -->
+ 
 ``
+* EXPLAIN onclick event
+
+
+## JS - WRITE LED SET_FUNCTION
+```js
+ function set_led(_led_index,_status){
+      console.log(_led_index + " " +_status);
+
+      $.post( "/api/set_led", { led_index: _led_index, status: _status },function (data) {
+          console.log(data);
+      } );
+    }
+```
+* EXPLAIN THE CALL
+* SHOW DEBUG LOG KLICKING BUTTON
+* EXPLAIN POST REQUEST WITH DATA
+
+
+## FLASK - SET LEDs API
+```python
+@app.route('/api/set_led', methods=['post'])
+def set_led():
+    global wiringpi
+    # 9
+    content = request.form
+    print(content['led_index'])
+
+    return jsonify({'status': 'ok'})
+```
+* DEBUG! request ->what we get from browser; and explain that our data are in form
+*
+
+
+## FLASK - ADD LED OUTPUT (`def set_led():`)
+```python
+if int(content['led_index']) == 1:
+        wiringpi.digitalWrite(LED_PIN_1, int(content['status']))  # 12
+    elif int(content['led_index']) == 2:
+        wiringpi.digitalWrite(LED_PIN_2, int(content['status']))  # 12
+```
+
+
+
+
+## FLASK - ADD DB LOG ROUTE
+```python
+@app.route('/api/get_log', methods=['get'])
+def get_log():
+    global DB_IP
+    logs = [];
+    couch_client = CouchDB('admin', 'admin', url='http://' + DB_IP + ':5984', connect=True)
+    log_db = couch_client['logs']
+    for document in log_db:
+        logs.append(document)
+    couch_client.disconnect();
+    return jsonify(logs)
+```
+
+## HTML - ADD DIV AS LOG PLACEHOLDER
+```html
+<br>
+<br>
+<div id="log">
+```
+
+## JS - ADD DB CALL READ
+
+```js
+   $.get( "/api/get_log", function( data ) {
+      console.log(data);
+      var tmp_html = "--- LOGS ---<br>";
+
+      for(var i = 0; i < data.length; i++){
+        tmp_html +=  data[i].action + "<br>";
+         }
+
+      $("#log").html(tmp_html);
+      });
+```
+
+## FLASK - ADD DB INSERT
+```python
+ # 13 -- DATABSE WRITE DOCUEMTENT --
+    couch_client = CouchDB('admin', 'admin', url='http://' + DB_IP + ':5984', connect=True)
+    log_db = couch_client['logs']
+    doc = log_db.create_document(
+        {'action': "SET LED " + str(content['led_index']) + " BY USER TO " + str(content['status'])})
+    couch_client.disconnect();
+
+```
