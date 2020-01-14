@@ -118,7 +118,22 @@ wiringpi.pullUpDnControl(BUTTON_BLUE_PIN, 2)
 * the `not` is because we used PULLUP setup in wiring pi; so the normal state (not pressed) is HIGH/True
 
 
-## 8 - HTML - ADD LED SWITCH BUTTONS
+## 8 - JS - WRITE LED SET_FUNCTION
+```js
+ function set_led(_led_index,_status){
+      console.log(_led_index + " " +_status);
+
+      $.post( "/api/set_led", { led_index: _led_index, status: _status },function (data) {
+          console.log(data);
+      } );
+    }
+```
+* EXPLAIN THE CALL
+* SHOW DEBUG LOG KLICKING BUTTON
+* EXPLAIN POST REQUEST WITH DATA
+
+
+## 9 - HTML - ADD LED SWITCH BUTTONS
 ```html
 
  <button type="button" class="btn btn-success" onclick="set_led(1,1)">SET LED 1 ON</button><!-- 9 -->
@@ -132,19 +147,6 @@ wiringpi.pullUpDnControl(BUTTON_BLUE_PIN, 2)
 * EXPLAIN onclick event
 
 
-## 9 - JS - WRITE LED SET_FUNCTION
-```js
- function set_led(_led_index,_status){
-      console.log(_led_index + " " +_status);
-
-      $.post( "/api/set_led", { led_index: _led_index, status: _status },function (data) {
-          console.log(data);
-      } );
-    }
-```
-* EXPLAIN THE CALL
-* SHOW DEBUG LOG KLICKING BUTTON
-* EXPLAIN POST REQUEST WITH DATA
 
 
 ## 10 - FLASK - SET LEDs API
