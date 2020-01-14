@@ -7,14 +7,14 @@ A short demo for IT2 Lesson; How to use Flask to light up LEDs on a PI
 
 
 
-## FIRST
+## 0 -FIRST
 * SHOW FOLDER STRUCTURE
 * SHOW PYCHARM SETTINGS
 * SHOW STARTED SERVER WHERE GOT A 404
 
 
 
-## FLASK - REDIRECT TO INDEX.html
+## 1 - FLASK - REDIRECT TO INDEX.html
 ```python
 @app.route('/')
 def index_redirect():
@@ -22,7 +22,7 @@ def index_redirect():
 ```
 
 
-## FLASK - API - ButtonStatus
+## 2 - FLASK - API - ButtonStatus
 
 ```python
 @app.route('/api/status', methods=['get'])
@@ -34,7 +34,7 @@ def api_status():
     return jsonify(status)
 ```
 
-## HTML - IMAGES FOR BUTTON
+## 3 - HTML - IMAGES FOR BUTTON
 ```html
 <table>
   <tr>
@@ -44,7 +44,7 @@ def api_status():
 </table>
 ```
 
-## JS- GET BUTTON STATE FROM API
+## 4 - JS- GET BUTTON STATE FROM API
 ```js
  $.get( "/api/status", function( data ) {
       console.log(data);
@@ -70,7 +70,7 @@ def api_status():
 
 
 
-## JS - DO IN INTERVAL
+## 5 - JS - DO IN INTERVAL
 ```js
 setInterval(function(){
 // DO STH EVERY 100 MS
@@ -78,7 +78,7 @@ setInterval(function(){
 ```
 * EXPLAIN SET INTERVAL
 
-## FLASK - INIT GPIO
+## 6 - FLASK - INIT GPIO
 ```python
 wiringpi.wiringPiSetup()
 # SETUP PINS
@@ -105,7 +105,7 @@ wiringpi.pullUpDnControl(BUTTON_BLUE_PIN, 2)
 * EXPLAIN PULLUP
 
 
-## FLASK - READ BUTTON INPUTS
+## 7 - FLASK - READ BUTTON INPUTS
 ```python
     status['button_yellow'] = not bool(wiringpi.digitalRead(BUTTON_YELLOW_PIN))
     status['button_blue'] = not bool(wiringpi.digitalRead(BUTTON_BLUE_PIN))
@@ -114,7 +114,7 @@ wiringpi.pullUpDnControl(BUTTON_BLUE_PIN, 2)
 * the `not` is because we used PULLUP setup in wiring pi; so the normal state (not pressed) is HIGH/True
 
 
-## HTML - ADD LED SWITCH BUTTONS
+## 8 - HTML - ADD LED SWITCH BUTTONS
 ```html
 
  <button type="button" class="btn btn-success" onclick="set_led(1,1)">SET LED 1 ON</button><!-- 9 -->
@@ -124,11 +124,11 @@ wiringpi.pullUpDnControl(BUTTON_BLUE_PIN, 2)
    <button type="button" class="btn btn-success" onclick="set_led(2,1)">SET LED 2 ON</button><!-- 9 -->
    <button type="button" class="btn btn-danger" onclick="set_led(2,0)">SET LED 2 OFF</button><!-- 9 -->
  
-``
+```
 * EXPLAIN onclick event
 
 
-## JS - WRITE LED SET_FUNCTION
+## 9 - JS - WRITE LED SET_FUNCTION
 ```js
  function set_led(_led_index,_status){
       console.log(_led_index + " " +_status);
@@ -143,7 +143,7 @@ wiringpi.pullUpDnControl(BUTTON_BLUE_PIN, 2)
 * EXPLAIN POST REQUEST WITH DATA
 
 
-## FLASK - SET LEDs API
+## 10 - FLASK - SET LEDs API
 ```python
 @app.route('/api/set_led', methods=['post'])
 def set_led():
@@ -158,7 +158,7 @@ def set_led():
 *
 
 
-## FLASK - ADD LED OUTPUT (`def set_led():`)
+## 11 - FLASK - ADD LED OUTPUT (`def set_led():`)
 ```python
 if int(content['led_index']) == 1:
         wiringpi.digitalWrite(LED_PIN_1, int(content['status']))  # 12
@@ -169,7 +169,7 @@ if int(content['led_index']) == 1:
 
 
 
-## FLASK - ADD DB LOG ROUTE
+## 12 - FLASK - ADD DB LOG ROUTE
 ```python
 @app.route('/api/get_log', methods=['get'])
 def get_log():
@@ -183,14 +183,14 @@ def get_log():
     return jsonify(logs)
 ```
 
-## HTML - ADD DIV AS LOG PLACEHOLDER
+## 13 - HTML - ADD DIV AS LOG PLACEHOLDER
 ```html
 <br>
 <br>
 <div id="log">
 ```
 
-## JS - ADD DB CALL READ
+## 14 - JS - ADD DB CALL READ
 
 ```js
    $.get( "/api/get_log", function( data ) {
@@ -205,7 +205,7 @@ def get_log():
       });
 ```
 
-## FLASK - ADD DB INSERT
+## 15 - FLASK - ADD DB INSERT
 ```python
  # 13 -- DATABSE WRITE DOCUEMTENT --
     couch_client = CouchDB('admin', 'admin', url='http://' + DB_IP + ':5984', connect=True)
