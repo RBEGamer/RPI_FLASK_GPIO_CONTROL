@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>FLASK GPIO EXAMPLE</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+
+
+
+  <style>
+    img
+    {
+    background-color: gray;
+    }
+  </style>
+</head>
+<body style="align: center;">
+<div class="center">
+<h1>DEMO SITE</h1>
+
+
+<table>
+  <tr>
+    <td><img src="img/btn_yellow_released.png" id="btn_yellow_img" /></td><!-- 4 -->
+    <td><img src="img/btn_blue_released.png" id="btn_blue_img" /></td><!-- 4 -->
+  </tr>
+</table>
+<table>
+  <tr>
+    <td><button type="button" class="btn btn-success" onclick="set_led(1,1)">SET LED 1 ON</button></td><!-- 9 -->
+    <td><button type="button" class="btn btn-danger" onclick="set_led(1,0)">SET LED 1 OFF</button></td><!-- 9 -->
+    </tr>
+   <tr>
+    <td><button type="button" class="btn btn-success" onclick="set_led(2,1)">SET LED 2 ON</button></td><!-- 9 -->
+    <td><button type="button" class="btn btn-danger" onclick="set_led(2,0)">SET LED 2 OFF</button></td><!-- 9 -->
+  </tr>
+</table>
+
+
+
+<br>
+<br>
+<div id="log">
+</div>
+
+  <script src="jquery/jquery.min.js"></script>
+  <script src="bootstrap/bootstrap.min.js"></script>
+
+
+
+  <script>
+    //<!-- 10 -->
+    function set_led(_led_index,_status){
+      console.log(_led_index + " " +_status);
+
+      $.post( "/api/set_led", { led_index: _led_index, status: _status },function (data) {
+          console.log(data);
+      } );
+    }
+    //------ 1 ---/*
+  $( document ).ready(function() {
+    console.log( "ready!" );
+
+
+     //----6 ----/*
+    setInterval(function(){
+
+       //----5 ----/*
+       $.get( "/api/status", function( data ) {
+      console.log(data);
+
+      //----6 ----/*
+      if(data.button_yellow){
+        $("#btn_yellow_img").attr("src","img/btn_yellow_pressed.png");
+      }else{
+        $("#btn_yellow_img").attr("src","img/btn_yellow_released.png");
+      }
+
+      //----7 ----/*
+      if(data.button_blue){
+        $("#btn_blue_img").attr("src","img/btn_blue_pressed.png");
+      }else{
+        $("#btn_blue_img").attr("src","img/btn_blue_released.png");
+      }
+
+    });
+
+
+
+        //----15 DB----/*
+       $.get( "/api/get_log", function( data ) {
+      console.log(data);
+      var tmp_html = "--- LOGS ---<br>";
+
+      for(var i = 0; i < data.length; i++){
+        tmp_html +=  data[i].action + "<br>";
+         }
+
+      $("#log").html(tmp_html);
+      });
+
+
+    },100);
+
+  });
+  </script>
+
+
+</div>
+</body>
+</html>
