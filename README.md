@@ -14,6 +14,10 @@ A short demo for IT2 Lesson; How to use Flask to light up LEDs on a PI
 * EXPLAIN BASIC FILES STRUCTURE WHAT IS THERE
 
 
+```python
+app = Flask(__name__, static_url_path='/static')
+```
+
 ## 1 - FLASK - REDIRECT TO INDEX.html
 ```python
 @app.route('/')
