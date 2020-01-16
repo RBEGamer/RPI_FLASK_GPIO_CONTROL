@@ -16,6 +16,13 @@ A short demo for IT2 Lesson; How to use Flask to light up LEDs on a PI
 
 
 ```python
+LED_PIN_1 = 7
+LED_PIN_2 = 0
+BUTTON_YELLOW_PIN = 9
+BUTTON_BLUE_PIN = 8
+```
+
+```python
 app = Flask(__name__, static_url_path='/static')
 ```
 
