@@ -14,38 +14,89 @@
 </head>
 
 <body style="align: center;">
-<div class="center">
+
+
+
+
+
+
+
 <h1>DEMO SITE</h1>
 
 
-<table>
-  <tr>
-    <td>A</td><!-- 4 -->
-    <td>B</td><!-- 4 -->
-  </tr>
-</table>
-<table>
-  <tr>
-    <td>C</td><!-- 9 -->
-    <td>D</td><!-- 9 -->
-    </tr>
-   <tr>
-    <td>E</td><!-- 9 -->
-    <td>F</td><!-- 9 -->
-  </tr>
-</table>
+<img src="/static/img/btn_yellow_released.png" id="img_btn_yellow" />
+<img src="/static/img/btn_blue_released.png" id="img_btn_blue" />
+
+<br>
+<br>
+<br>
+
+<button type="button" onclick="set_led(1,1)">SETZTE LED 1 AN</button>
+<button type="button" onclick="set_led(1,0)">SETZTE LED 1 AUS</button>
 
 
+<br>
+<br>
+
+<button type="button" onclick="set_led(2,1)">SETZTE LED 2 AN</button>
+<button type="button" onclick="set_led(2,0)">SETZTE LED 2 AUS</button>
 
 
+<br>
+<br>
+
+<h2>-- LOGS ---</h2>
+<br>
+<div id="log_element">
 </div>
+
 
   <script src="jquery/jquery.min.js"></script>
   <script src="bootstrap/bootstrap.min.js"></script>
-
   <script>
+
+    function set_led(_index,_state){
+
+      $.post('/api/led',{'index':_index,'state':_state},function (data) {
+      console.log(data);
+      })
+
+    }
+
   $( document ).ready(function() {
     console.log( "ready!" );
+
+    setInterval(function () {
+
+       $.get('/api/status',function (data) {
+        if(data.yellow == true){
+          $('#img_btn_yellow').attr('src','/static/img/btn_yellow_pressed.png')
+        }else{
+          $('#img_btn_yellow').attr('src','/static/img/btn_yellow_released.png')
+        }
+
+        if(data.blue == true){
+          $('#img_btn_blue').attr('src','/static/img/btn_blue_pressed.png')
+        }else{
+          $('#img_btn_blue').attr('src','/static/img/btn_blue_released.png')
+        }
+    });
+
+
+
+        $.get('/api/logs',function (data) {
+          var tmp_string = ""
+          for(var i = 0; i < data.length;i++){
+            tmp_string += "<br>" + data[i];
+          }
+          $("#log_element").html(tmp_string)
+
+        })
+
+
+
+    },100);
+
 
 
 
