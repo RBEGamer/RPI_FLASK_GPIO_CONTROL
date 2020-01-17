@@ -2,7 +2,8 @@
 A short demo for IT2 Lesson; How to use Flask to light up LEDs on a PI
 
 
-
+## -2 - DEMO VIDEO
+[![Alt text](https://img.youtube.com/vi/Yv3w-lUhOZU/0.jpg)](https://www.youtube.com/watch?v=Yv3w-lUhOZU)
 
 ## -1 - PYCHARM REMOTE DEBUGGIN
 
