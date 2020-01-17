@@ -4,7 +4,10 @@ A short demo for IT2 Lesson; How to use Flask to light up LEDs on a PI
 
 
 
+## -1 - PYCHARM REMOTE DEBUGGIN
 
+![Gopher image](documentation/IMG_2488.JPG)
+![Gopher image](documentation/IMG_2495.JPG)
 
 
 ## 0 -FIRST
